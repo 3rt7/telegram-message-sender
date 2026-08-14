@@ -13,9 +13,9 @@ from dotenv import load_dotenv
 import os
 
 # Load from .env file
-load_dotenv()
-api_id = os.environ.get('api_id')
-api_hash = os.environ.get('api_hash')
+load_dotenv('.env')
+api_id = os.getenv('api_id')
+api_hash = os.getenv('api_hash')
 
 with TelegramClient(StringSession(), api_id, api_hash) as client:
     print("\nLogged in. Your session string (save this as the TG_SESSION secret):\n")
