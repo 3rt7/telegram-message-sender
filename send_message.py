@@ -14,7 +14,7 @@ import time
 
 API_ID = int(os.environ.get("TG_API_ID"))
 API_HASH = os.environ.get("TG_API_HASH")
-SESSION = os.environ.get("TG_SESSION")
+SESSION = os.environ.get("TG_SESSION") # session string from telethon, run generate_session.py
 RECIPIENT = os.environ.get("TG_RECIPIENT")  # username like "@someone" or numeric user id
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")  # leave unset to just send emojis
 
@@ -22,8 +22,9 @@ EMOJIS = ["❤️", "😘", "😠", "🍆"]
 
 
 def get_message():
-    if not GROQ_API_KEY:
-        return " ".join(random.sample(EMOJIS, 1))
+    return random.sample(EMOJIS, 1)[0]
+    # if not GROQ_API_KEY:
+    #     return " ".join(random.sample(EMOJIS, 1))
 
 #    import urllib.request
 #    import json
@@ -63,8 +64,10 @@ def get_message():
 def main():
     time.sleep(random.randint(0, 36000))
 
+    print("Getting message...")
     message = get_message()
 
+    print("Sending message...")
     with TelegramClient(StringSession(SESSION), API_ID, API_HASH) as client:
         client.send_message(RECIPIENT, message)
     print(f"Sent: {message}")
