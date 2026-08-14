@@ -1,0 +1,29 @@
+name: Daily Telegram message
+
+on:
+  schedule:
+    # Runs at 09:00 UTC every day - adjust to your timezone (GitHub cron is always UTC)
+    - cron: "0 9 * * *"
+  workflow_dispatch: {}  # lets you trigger it manually from the Actions tab to test
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install telethon
+
+      - name: Send message
+        env:
+          TG_API_ID: ${{ secrets.TG_API_ID }}
+          TG_API_HASH: ${{ secrets.TG_API_HASH }}
+          TG_SESSION: ${{ secrets.TG_SESSION }}
+          TG_RECIPIENT: ${{ secrets.TG_RECIPIENT }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: python send_message.py
