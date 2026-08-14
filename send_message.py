@@ -62,7 +62,7 @@ def get_message():
 
 
 def main():
-    time.sleep(random.randint(0, 36000))
+    time.sleep(random.randint(0, 18000))
 
     print("Getting message...")
     message = get_message()
