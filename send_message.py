@@ -10,6 +10,7 @@ import os
 import random
 from telethon.sync import TelegramClient
 from telethon.sessions import StringSession
+import time
 
 API_ID = int(os.environ.get("TG_API_ID"))
 API_HASH = os.environ.get("TG_API_HASH")
@@ -60,7 +61,10 @@ def get_message():
 
 
 def main():
+    time.sleep(random.randint(0, 36000))
+
     message = get_message()
+
     with TelegramClient(StringSession(SESSION), API_ID, API_HASH) as client:
         client.send_message(RECIPIENT, message)
     print(f"Sent: {message}")
