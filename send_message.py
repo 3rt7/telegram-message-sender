@@ -16,7 +16,6 @@ API_ID = int(os.environ.get("TG_API_ID"))
 API_HASH = os.environ.get("TG_API_HASH")
 SESSION = os.environ.get("TG_SESSION") # session string from telethon, run generate_session.py
 RECIPIENT = os.environ.get("TG_RECIPIENT")  # username like "@someone" or numeric user id
-GROQ_API_KEY = os.environ.get("GROQ_API_KEY")  # leave unset to just send emojis
 
 EMOJIS = ["❤️", "😘", "😠", "🍆"]
 
