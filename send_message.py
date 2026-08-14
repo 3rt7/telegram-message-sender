@@ -11,10 +11,10 @@ import random
 from telethon.sync import TelegramClient
 from telethon.sessions import StringSession
 
-API_ID = int(os.environ["TG_API_ID"])
-API_HASH = os.environ["TG_API_HASH"]
-SESSION = os.environ["TG_SESSION"]
-RECIPIENT = os.environ["TG_RECIPIENT"]  # username like "@someone" or numeric user id
+API_ID = int(os.environ.get("TG_API_ID"))
+API_HASH = os.environ.get("TG_API_HASH")
+SESSION = os.environ.get("TG_SESSION")
+RECIPIENT = os.environ.get("TG_RECIPIENT")  # username like "@someone" or numeric user id
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")  # leave unset to just send emojis
 
 EMOJIS = ["❤️", "😘", "😠", "🍆"]

@@ -9,9 +9,13 @@ pip install telethon --break-system-packages   (or in a venv)
 
 from telethon.sync import TelegramClient
 from telethon.sessions import StringSession
+from dotenv import load_dotenv
+import os
 
-api_id = int(input("api_id: "))
-api_hash = input("api_hash: ")
+# Load from .env file
+load_dotenv()
+api_id = os.environ.get('api_id')
+api_hash = os.environ.get('api_hash')
 
 with TelegramClient(StringSession(), api_id, api_hash) as client:
     print("\nLogged in. Your session string (save this as the TG_SESSION secret):\n")
