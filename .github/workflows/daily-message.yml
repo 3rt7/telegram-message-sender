@@ -2,29 +2,66 @@ name: Daily Telegram message
 
 on:
   schedule:
-    # Runs twice a day at 8:30 UTC and 18:30 UTC
+    # About every 30 minutes from 08:30 to 19:30 UTC (12:00–23:00 at UTC+3:30).
+    # One run per UTC day sends; the others exit in a few seconds. The choice
+    # is a hash of the date in send_message.py, so the runs do not need shared storage.
+    # Minute 0 is skipped because GitHub often delays or drops those jobs.
+    # Keep every cron string identical to SLOTS in send_message.py.
+    #
+    # 08:30–13:30 UTC (12:00–17:00 at UTC+3:30)
     - cron: "30 8 * * *"
+    - cron: "5 9 * * *"
+    - cron: "30 9 * * *"
+    - cron: "5 10 * * *"
+    - cron: "30 10 * * *"
+    - cron: "5 11 * * *"
+    - cron: "30 11 * * *"
+    - cron: "5 12 * * *"
+    - cron: "30 12 * * *"
+    - cron: "5 13 * * *"
+    - cron: "30 13 * * *"
+    # Evening: 14:30–19:30 UTC (18:00–23:00 at UTC+3:30)
     - cron: "30 14 * * *"
-  workflow_dispatch: {}  # lets you trigger it manually from the Actions tab to test
+    - cron: "5 15 * * *"
+    - cron: "30 15 * * *"
+    - cron: "5 16 * * *"
+    - cron: "30 16 * * *"
+    - cron: "5 17 * * *"
+    - cron: "30 17 * * *"
+    - cron: "5 18 * * *"
+    - cron: "30 18 * * *"
+    - cron: "5 19 * * *"
+    - cron: "30 19 * * *"
+  workflow_dispatch: {} # send once, immediately, from the Actions tab
 
 jobs:
   send:
     runs-on: ubuntu-latest
+    env:
+      SLOT: ${{ github.event.schedule }}
+      FORCE_SEND: ${{ github.event_name == 'workflow_dispatch' }}
     steps:
       - uses: actions/checkout@v4
 
+      - name: Decide if this run sends
+        id: decide
+        run: python3 send_message.py --decide >> "$GITHUB_OUTPUT"
+
       - uses: actions/setup-python@v5
+        if: steps.decide.outputs.send == 'true'
         with:
           python-version: "3.12"
+          cache: pip
 
       - name: Install dependencies
+        if: steps.decide.outputs.send == 'true'
         run: pip install -r requirements.txt
 
       - name: Send message
+        if: steps.decide.outputs.send == 'true'
         env:
           TG_API_ID: ${{ secrets.TG_API_ID }}
           TG_API_HASH: ${{ secrets.TG_API_HASH }}
           TG_SESSION: ${{ secrets.TG_SESSION }}
           TG_RECIPIENT: ${{ secrets.TG_RECIPIENT }}
-          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: python send_message.py
