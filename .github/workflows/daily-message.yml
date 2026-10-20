@@ -69,3 +69,5 @@ jobs:
           TG_SESSION: ${{ secrets.TG_SESSION }}
           TG_RECIPIENT: ${{ secrets.TG_RECIPIENT }}
         run: python send_message.py
+  permissions:
+    contents: read
