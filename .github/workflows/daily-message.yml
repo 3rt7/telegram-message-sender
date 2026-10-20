@@ -41,6 +41,8 @@ on:
 jobs:
   send:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     env:
       SLOT: ${{ github.event.schedule }}
       FORCE_SEND: ${{ github.event_name == 'workflow_dispatch' }}
@@ -69,5 +71,3 @@ jobs:
           TG_SESSION: ${{ secrets.TG_SESSION }}
           TG_RECIPIENT: ${{ secrets.TG_RECIPIENT }}
         run: python send_message.py
-  permissions:
-    contents: read
