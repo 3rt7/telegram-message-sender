@@ -55,6 +55,10 @@ EMOJIS = [
 # Minute 0 is omitted. GitHub often delays or drops jobs at the top of the hour.
 # One hash of the UTC date picks a single entry from this list.
 SLOTS = [
+    "30 6 * * *",
+    "5 7 * * *",
+    "30 7 * * *",
+    "5 8 * * *",
     "30 8 * * *",
     "5 9 * * *",
     "30 9 * * *",

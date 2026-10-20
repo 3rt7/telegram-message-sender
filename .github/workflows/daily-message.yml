@@ -8,7 +8,11 @@ on:
     # Minute 0 is skipped because GitHub often delays or drops those jobs.
     # Keep every cron string identical to SLOTS in send_message.py.
     #
-    # 08:30–13:30 UTC (12:00–17:00 at UTC+3:30)
+    # 06:30–13:30 UTC (10:00–17:00 at UTC+3:30)
+    - cron: "30 6 * * *"
+    - cron: "5 7 * * *"
+    - cron: "30 7 * * *"
+    - cron: "5 8 * * *"
     - cron: "30 8 * * *"
     - cron: "5 9 * * *"
     - cron: "30 9 * * *"
