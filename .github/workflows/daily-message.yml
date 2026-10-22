@@ -2,40 +2,20 @@ name: Daily Telegram message
 
 on:
   schedule:
-    # About every 30 minutes from 08:30 to 19:30 UTC (12:00–23:00 at UTC+3:30).
-    # One run per UTC day sends; the others exit in a few seconds. The choice
-    # is a hash of the date in send_message.py, so the runs do not need shared storage.
-    # Minute 0 is skipped because GitHub often delays or drops those jobs.
-    # Keep every cron string identical to SLOTS in send_message.py.
+    # Four runs per UTC day. Each cron owns one segment of the day; the run
+    # whose segment contains the date-hashed slot (see SEGMENTS in
+    # send_message.py) sends, the others exit in seconds. The segments
+    # partition the day, so exactly one run sends even if GitHub delays jobs
+    # or starts them all at once. Delays only make the message arrive later,
+    # which acts as natural jitter on the send time.
+    # Minute 0 is avoided because GitHub often delays or drops those jobs.
+    # Keep every cron string identical to SEGMENTS in send_message.py.
     #
-    # 06:30–13:30 UTC (10:00–17:00 at UTC+3:30)
-    - cron: "30 6 * * *"
-    - cron: "5 7 * * *"
-    - cron: "30 7 * * *"
-    - cron: "5 8 * * *"
-    - cron: "30 8 * * *"
-    - cron: "5 9 * * *"
-    - cron: "30 9 * * *"
-    - cron: "5 10 * * *"
-    - cron: "30 10 * * *"
-    - cron: "5 11 * * *"
-    - cron: "30 11 * * *"
-    - cron: "5 12 * * *"
-    - cron: "30 12 * * *"
-    - cron: "5 13 * * *"
-    - cron: "30 13 * * *"
-    # Evening: 14:30–19:30 UTC (18:00–23:00 at UTC+3:30)
-    - cron: "30 14 * * *"
-    - cron: "5 15 * * *"
-    - cron: "30 15 * * *"
-    - cron: "5 16 * * *"
-    - cron: "30 16 * * *"
-    - cron: "5 17 * * *"
-    - cron: "30 17 * * *"
-    - cron: "5 18 * * *"
-    - cron: "30 18 * * *"
-    - cron: "5 19 * * *"
-    - cron: "30 19 * * *"
+    # Together the segments cover 06:30–19:30 UTC (10:00–23:00 at UTC+3:30).
+    - cron: "30 6 * * *"   # owns 06:30–10:00 UTC (10:00–13:30 at UTC+3:30)
+    - cron: "5 10 * * *"   # owns 10:00–13:30 UTC (13:30–17:00 at UTC+3:30)
+    - cron: "30 13 * * *"  # owns 13:30–17:00 UTC (17:00–20:30 at UTC+3:30)
+    - cron: "5 17 * * *"   # owns 17:00–19:45 UTC (20:30–23:15 at UTC+3:30)
   workflow_dispatch: {} # send once, immediately, from the Actions tab
 
 jobs:
